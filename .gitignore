@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# 运行时产物（demo/测试生成）
+clip_work/
+final/
+*.wav
+frame_check.png
+
+# 系统
+.DS_Store
+Thumbs.db
