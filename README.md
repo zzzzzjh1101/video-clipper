@@ -79,6 +79,75 @@ python scripts/render.py clip_work/clips --format 9:16 --subtitles clip_work/tim
 - **自主模式**：`全自动` 直接跑完七步
 - **半自动**：只出时间表和字幕，人工挑选后再切
 
+## ⚠️ 注意事项（硬规则，违反会出问题）
+
+1. **词边界切割**：切点必须落在 whisper 词时间戳边界上，绝不切断音节/字（`cut.py` 自动保证；手写 EDL 时同样遵守）。
+2. **30ms 音频淡入淡出**：每个切点 `afade` 0.03s，否则拼接处有爆音。
+3. **字幕最后加**：先叠完所有效果（动效/转场）再烧字幕，否则字幕被遮挡。
+4. **转写缓存**：源文件不变就永不重转写（`transcripts/` 下有缓存）；换模型参数才重跑。
+5. **高光时间点必须落在句子/语义边界**：以转写文本为准，绝不硬切（`analyze.py` 自动吸附到句子边界）。
+6. **字幕文本用转写原文**：不做「美化改写」；如要修正错别字，逐字对比后再改。
+7. **时长紧凑**：切片宁短勿长，前 3 秒必须有钩子（福利/金句/冲突/悬念），平台完播率法则。
+8. **ASR 必须词级模式**：禁用 SRT/句子级输出做分析——丢失亚秒级边界，切割会不准。
+9. **不在源目录写东西**：一切产物进 `clip_work/`，源文件永不被修改。
+10. **先出时间表再动手切**：即使自主模式，也先给用户过目 `timeline.md`（除非明确要求直接出片）。
+
+**模型选择建议**：中文正式发布用 `large-v3`（small/medium 会有错字）；CPU 跑加 `--compute int8`；长视频可用 `--start/--end` 分段处理。
+
+## 🧩 依赖与配套插件
+
+### 核心依赖（必须）
+
+| 依赖 | 用途 |
+|---|---|
+| **ffmpeg + ffprobe** | 音频提取 / 切割 / 渲染（Windows: `winget install Gyan.FFmpeg`，macOS: `brew install ffmpeg`） |
+| **Python 3.10+** | 运行全部脚本 |
+| **faster-whisper** | 词级语音识别（首次运行自动下载模型，约 300MB-3GB，缓存于 `~/.cache/huggingface`） |
+| **numpy** | 音频兴奋点检测 |
+
+### 可选依赖（音色分离 / 多主播 PK 必需）
+
+| 依赖 | 用途 |
+|---|---|
+| **torch + torchaudio** | 深度学习运行时（CPU 版即可，GPU 更快） |
+| **pyannote.audio** | 说话人分离（`diarize.py`） |
+| **HuggingFace token** | pyannote 模型是门控的：需注册 huggingface.co → 创建 token → 接受 [speaker-diarization-3.1](https://huggingface.co/pyannote/speaker-diarization-3.1) 和 [segmentation-3.0](https://huggingface.co/pyannote/segmentation-3.0) 模型许可 |
+
+> 不装 torch 也能用全套其他功能：`diarize.py` 自动降级，所有句子标记为 `S0`（未分离说话人）。
+
+### LLM 分析层（必须其一）
+
+任意 **OpenAI 兼容端点**，环境变量配置：
+```bash
+export LLM_API_BASE="https://api.deepseek.com/v1"   # 或豆包/Kimi/GPT/Claude/通义/MiniMax/本地 vLLM…
+export LLM_API_KEY="sk-..."
+export LLM_MODEL="deepseek-chat"
+```
+分析质量直接受模型影响：**更强的模型 → 更准的高光判断**。推荐 DeepSeek-V3 / GPT-4o 级别模型。
+
+### 配套剪辑工具（成片增强，可选）
+
+| 工具 | 配合方式 |
+|---|---|
+| **video-use** | `edl.json` 的 `ranges` 结构兼容，二次精剪/去气口/加动效 |
+| **剪映 jianying-editor** | `subtitles.srt` 直接 `import_srt(srt, track_name=...)` 导入，说话人标签自动保留 |
+| **HyperFrames** | 切片文案转配音重制 + 弹入动效（中文科普解说风格） |
+| **ffmpeg-video-effects** | 快速加转场/调色/特效字 |
+| **yt-dlp** | 下载直播回放/长视频作为输入源 |
+
+## ❓ FAQ
+
+| 问题 | 解答 |
+|---|---|
+| 中文转写有错别字？ | 换 `--model large-v3`（small/medium 准确率有限）；正式发布务必用 large-v3 |
+| 转写太慢？ | CPU 加 `--compute int8`；换 small 模型；有 GPU 用 `--device cuda` |
+| pyannote 报 401 / 403？ | 没接受模型许可或 token 无读权限，见「可选依赖」 |
+| 字幕说话人全是 S0？ | 没跑 `diarize.py`，或未安装 torch/pyannote |
+| 高光判断不准？ | 确认 `--type` 选对切片类型；或换更强的 LLM 模型重跑 `analyze.py` |
+| Windows 找不到 ffmpeg？ | 安装后重启终端；确认 ffmpeg.exe 在 PATH |
+| 视频超过 2 小时？ | 用 `--start/--end` 分段转写，或先按章节粗切 |
+| 能商用吗？ | 代码 MIT 协议可自由商用；但**切片内容版权归原直播者/平台**，发布前请确认授权（直播切片分销需获主播授权） |
+
 ## 📦 多 Agent 安装
 
 | Agent | 位置 |
