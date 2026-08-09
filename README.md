@@ -131,7 +131,7 @@ export LLM_MODEL="deepseek-chat"
 |---|---|
 | **video-use** | `edl.json` 的 `ranges` 结构兼容，二次精剪/去气口/加动效 |
 | **剪映 jianying-editor** | `subtitles.srt` 直接 `import_srt(srt, track_name=...)` 导入，说话人标签自动保留 |
-| **HyperFrames** | 切片文案转配音重制 + 弹入动效（中文科普解说风格） |
+| **HyperFrames** | 切片文案转配音重制 + 弹入动效（中文快节奏解说风格） |
 | **ffmpeg-video-effects** | 快速加转场/调色/特效字 |
 | **yt-dlp** | 下载直播回放/长视频作为输入源 |
 

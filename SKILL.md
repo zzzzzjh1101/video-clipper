@@ -184,7 +184,7 @@ python scripts/render.py clips/ --format 9:16 --subtitles subtitles.srt -o final
 
 - **video-use**（精剪/去气口/加动效）：把 clips 目录丢给它，用 `takes_packed.md` 思路做二次精剪。
 - **jianying-editor**（剪映工程）：`project.script.import_srt(srt, track_name=...)` 直接导入带说话人的 SRT（见 jianying-editor skill）。
-- **hyperframes / hyperframes-cn-video**（中文科普解说风）：切片文案 + edge-tts 配音重制，加弹入动效。
+- **hyperframes / hyperframes-cn-video**（中文快节奏解说风格）：切片文案 + edge-tts 配音重制，加弹入动效。
 - **ffmpeg-video-effects**：快速加字幕/转场/调色。
 
 ## 安装
