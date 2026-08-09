@@ -135,6 +135,23 @@ export LLM_MODEL="deepseek-chat"
 | **ffmpeg-video-effects** | 快速加转场/调色/特效字 |
 | **yt-dlp** | 下载直播回放/长视频作为输入源 |
 
+## 🐛 反馈 Bug 与提问
+
+用出问题别慌，按下面的渠道来，能最快得到处理：
+
+| 场景 | 去哪 |
+|---|---|
+| 🐛 **遇到 Bug** | 开 [Issue](https://github.com/zzzzzjh1101/video-clipper/issues/new/choose)（选「Bug 报告」模板），**必填环境信息**（系统/Python/ffmpeg 版本 + 完整报错日志），否则没法排查 |
+| 💬 **使用疑问 / 功能建议** | 去 [Discussions 讨论区](https://github.com/zzzzzjh1101/video-clipper/discussions)，别开 Issue |
+| 📖 **安装/环境问题** | 先看 [安装文档](references/install.md) 的「常见坑」表 |
+| 🔍 **先搜再报** | 提交前先搜索现有 Issue/Discussion，八成有人遇到过 |
+
+**反馈小技巧（提高处理速度）**：
+- 报错**贴文本日志**，不要截图（搜索和复制都方便）
+- 写明你的**完整命令**（含 `--model`、`--type` 参数）
+- 附上最小复现素材（能公开的一小段视频/音频）
+- 标注是否装了 torch/pyannote（音色分离相关 bug 关键信息）
+
 ## ❓ FAQ
 
 | 问题 | 解答 |
