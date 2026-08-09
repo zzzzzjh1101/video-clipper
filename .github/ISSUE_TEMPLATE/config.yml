@@ -1,5 +1,8 @@
-blank_issues_enabled: true
+blank_issues_enabled: false
 contact_links:
-  - name: 💬 提问 / 求助
+  - name: 💬 讨论区 / 提问
     url: https://github.com/zzzzzjh1101/video-clipper/discussions
-    about: 不确定是不是 bug?先来讨论区问问
+    about: 使用疑问、功能建议、闲聊请去 Discussions，不用开 Issue。
+  - name: 📖 安装文档
+    url: https://github.com/zzzzzjh1101/video-clipper/blob/main/references/install.md
+    about: 环境安装、pyannote 配置等问题先看安装文档。
